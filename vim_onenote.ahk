@@ -1,24 +1,27 @@
 ;---------------------------------------
 ; Basic VIM Keybinds for onenote.
-; https://github.com/idvorkin/Vim-Keybindings-For-Onenote
 ;---------------------------------------
 
 ;---------------------------------------
 ; Usage - Run vim_onenote.ahk, or autohotkey vim_onenote.ahk
 ;---------------------------------------
 
+;--------------------------------------------------------------------------------
+; https://github.com/idvorkin/Vim-Keybindings-For-Onenote
+;
 ; Acknowledgments:
 ; This is based on a vim autohotkey script which I can no longer find. If you find it, 
 ; please tell me and I'll add it to the acknowledgments
 ;---------------------------------------
 
+;---------------------------------------
 ; Settings
 ;---------------------------------------
 ;#NoTrayIcon ; NoTrayIcon hides the tray icon.
 #SingleInstance Force ; SingleInstance makes the script automatically reload.
 
-; The code itself.
 ;---------------------------------------
+; The code itself.
 ;---------------------------------------
 
 ; The VIM input model has two modes, normal mode, where you enter commands, 
@@ -42,6 +45,14 @@ IsLastKey(key)
     return (A_PriorHotkey == key and A_TimeSincePriorHotkey < 400)
 }
 
+; ESC enters Normal Mode
+ESC::
+	Suspend, Off
+    ; send escape on through to exit from find
+    SendInput, {ESC} 
+	ToolTip, OneNote Vim Command Mode Active, 0, 0
+return
+
 ;--------------------------------------------------------------------------------
 ; Return to InsertMode
 InsertMode:
@@ -50,14 +61,6 @@ InsertMode:
 return
 
 ;--------------------------------------------------------------------------------
-; ESC enters Normal Mode
-ESC::
-	Suspend, Off
-    ; send escape on through to I can get out of find
-    SendInput, {ESC} 
-	ToolTip, OneNote Vim Command Mode Active, 0, 0
-return
-
 +i::
     SendInput, {Home}
     Gosub InsertMode
@@ -86,8 +89,7 @@ return
 
 Return::SendInput,^{down}
 return
-; Enter::SendInput,^{down}
-; return 
+
 
 +x::SendInput, {BackSpace}
 return 
@@ -188,8 +190,6 @@ return
 
 +d::
 Send, {ShiftDown}{End}
-; Send, ^c ; Do a yank before erasing.
-; Send {Del}
 Send, ^x ; Cut instead of yank and delete
 Send, {ShiftUp}
 return
@@ -199,8 +199,6 @@ if IsLastKey("d")
 {
     Send, {Home}{ShiftDown}{End}
     Send, ^x ; Cut instead of yank and delete
-    ; Send, ^c ; Do a yank before erasing.
-    ; Send, {Del}
     Send, {Shift}
 }
 return 
